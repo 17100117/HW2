@@ -20,6 +20,15 @@ class MoviesController < ApplicationController
     end
     
     
+    @all_ratings = Movie.all_ratings
+    @ticked_ratings = params[:ratings] if params.has_key? 'ratings'
+    if @ticked_ratings
+      @movies = Movie.find_all_by_rating(@ticked_ratings)
+    end
+    
+    
+    
+    
   end
 
   def new
@@ -49,5 +58,55 @@ class MoviesController < ApplicationController
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
   end
+  
+  def bar
+    var = Movie.new(movie_params)
+    @movie = Movie.find_by title: var.title
+    if(@movie != nil)
+      # @movie.update(title: var, rating: var, release_date: var)
+      @movie.title = var.title
+      if(var.release_date!=nil)
+        @movie.release_date = var.release_date
+      else
+        @movie.release_date = @movie.release_date 
+      end
+      if(var.rating!=nil)
+        @movie.rating = var.rating
+      else
+        @movie.rating = @movie.rating 
+      end
+      @movie.save
+      redirect_to movies_path
+    else
+      flash[:notice] = "Movie does not exist."
+      redirect_to foo_path
+    end
+  end
+  
+  def foo
+    @movie = Movie.new
+  end
+  
+  def func
+    var = Movie.new(movie_params)
+    @movie1 = Movie.find_by rating: var.rating
+    @movie2 = Movie.find_by release_date: var.release_date
+    if(@movie1 != nil || @movie2 != nil)
+      while(@movie1 != nil)
+      # flash[:notice] = "Movie does not exist."
+        @movie1.destroy
+        @movie1 = Movie.find_by rating: var.rating
+      end
+      while(@movie2 != nil)
+      # flash[:notice] = "Movie does not exist."
 
+        @movie2.destroy
+        @movie2 = Movie.find_by release_date: var.release_date
+      end
+    else
+      flash[:notice] = "Movie does not exist."
+    end
+    redirect_to movies_path
+  end
+  
 end
