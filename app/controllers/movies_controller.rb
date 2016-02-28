@@ -20,11 +20,11 @@ class MoviesController < ApplicationController
     end
     
     
-    @all_ratings = Movie.all_ratings
-    @ticked_ratings = params[:ratings] if params.has_key? 'ratings'
-    if @ticked_ratings
-      @movies = Movie.find_all_by_rating(@ticked_ratings)
-    end
+    # @all_ratings = Movie.all_ratings
+    # @ticked_ratings = params[:ratings] if params.has_key? 'ratings'
+    # if @ticked_ratings
+    #   @movies = Movie.find()
+    # end
     
     
     
